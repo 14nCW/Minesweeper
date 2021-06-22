@@ -20,7 +20,7 @@ public class Game {
             buttons[i].setVisible(true);
             GameBoard.add(buttons[i]);
         }
-        System.out.println("test");
+        System.out.println("chuj nie test");
     }
 }
 
