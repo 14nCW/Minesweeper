@@ -15,7 +15,7 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frameMain.dispose();
-                game.game(450,620,1);
+                game.game(1);
             }
         });
 
@@ -25,7 +25,7 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frameMain.dispose();
-                game.game(650,920,2);
+                game.game(2);
             }
         });
 
@@ -35,7 +35,7 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frameMain.dispose();
-                game.game(1150,920,3);
+                game.game(3);
             }
         });
 
@@ -44,6 +44,5 @@ public class Main {
         frameMain.add(buttonMedium);
         frameMain.add(buttonHard);
         frameMain.setVisible(true);
-        System.out.println("test");
     }
 }
