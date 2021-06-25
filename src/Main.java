@@ -1,9 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Game game = new Game();
         JFrame frameMain = new JFrame("Minesweeper");
         frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -15,7 +16,7 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frameMain.dispose();
-                game.game(1);
+                game.diff(1);
             }
         });
 
@@ -25,7 +26,7 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frameMain.dispose();
-                game.game(2);
+                game.diff(2);
             }
         });
 
@@ -35,7 +36,7 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frameMain.dispose();
-                game.game(3);
+                game.diff(3);
             }
         });
 

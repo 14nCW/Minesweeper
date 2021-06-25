@@ -1,17 +1,11 @@
-/*
-public class Logic {
-    public int nearbyMines(int ROWS, int COLUMNS) {
-        int minesNearby = 0;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
-        // TODO Would like to perform a loop of this
-        // Checks 8 surrounding squares and checks if they're piece
-        for (int i=row-1; i<=+1; i++) {
-            for (int j=col-1; j<=col+1; j++) {
-                if (isPiece(i, j, this.mine)) {
-                    minesNearby++;
-                }
-            }
-        }
-        return minesNearby;
-    }
-}*/
+public class Logic {
+    public char flag = '⚑';
+    public char mine = '✸';
+}
