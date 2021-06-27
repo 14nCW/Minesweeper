@@ -1,15 +1,11 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.Math;
+import java.util.Timer;
 
 public class Game extends JFrame {
     Icon kafelek = new ImageIcon("src/resource/kafelek.png");
@@ -30,60 +26,48 @@ public class Game extends JFrame {
     Icon won = new ImageIcon("src/resource/won.png");
     Icon smile = new ImageIcon("src/resource/smile.png");
 
-    Main main = new Main();
-
     private JButton[][] buttons = null;
-    private JFrame GameBoard = new JFrame("Powodzenia!");
+    private final JFrame GameBoard = new JFrame("Powodzenia!");
     private int ROWS;
     private int COLUMNS;
     private int BOMBS;
     private boolean GameStat = true;
-    public JPanel Grid = new JPanel();
-    public JPanel TopPanel = new JPanel();
-    public JPanel LeftPanel = new JPanel();
-    public JPanel RightPanel = new JPanel();
-
-
-
-    public Game() throws IOException {
-        return;
-    }
+    private Timer timer = new Timer();
 
     public void diff(int DIFF) {
         switch (DIFF) {
-            case 1: {
+            case 1:
                 ROWS = 14;
                 COLUMNS = 10;
                 BOMBS = (int) Math.floor(ROWS * COLUMNS * 0.3);
                 game();
                 break;
-            }
-            case 2: {
+            case 2:
                 ROWS = 14;
                 COLUMNS = 18;
                 BOMBS = (int) Math.floor(ROWS * COLUMNS * 0.3);
                 game();
                 break;
-            }
-            case 3: {
+            case 3:
                 ROWS = 19;
                 COLUMNS = 25;
                 BOMBS = (int) Math.floor(ROWS * COLUMNS * 0.3);
                 game();
                 break;
-            }
-            case 4: {
+            case 4:
                 ROWS = 6;
                 COLUMNS = 6;
                 BOMBS = 8;
                 game();
                 break;
-            }
         }
     }
 
     public void game() {
-
+        JPanel Grid = new JPanel();
+        JPanel TopPanel = new JPanel();
+        JPanel LeftPanel = new JPanel();
+        JPanel RightPanel = new JPanel();
 
         GameBoard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GameBoard.setSize(ROWS * 40 + 50, COLUMNS * 40 + 60);
@@ -94,15 +78,7 @@ public class Game extends JFrame {
         JButton reset = new JButton("reset");
         reset.setPreferredSize(new Dimension(60, 60));
         TopPanel.add(reset);
-        reset.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GameStat = true;
-                System.exit(0);
-                game();
-            }
-        });
-
+        reset.addActionListener(new myActionListener());
         Grid.setPreferredSize(new Dimension(COLUMNS, ROWS));
         Grid.setVisible(true);
         Grid.setBackground(Color.cyan);
@@ -148,7 +124,6 @@ public class Game extends JFrame {
                     i--;
                 } else {
                     buttons[(int) column][(int) row].setIcon(kafelekBomba);
-                    System.out.println(i);
                 }
             }
     }
@@ -324,6 +299,14 @@ public class Game extends JFrame {
 
         @Override
         public void mouseExited(MouseEvent e) {
+        }
+    }
+
+    private class myActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            GameStat = true;
+            game();
         }
     }
 }
