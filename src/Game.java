@@ -1,3 +1,5 @@
+import org.ietf.jgss.GSSManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -5,26 +7,26 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.Math;
-import java.util.Timer;
 
 public class Game extends JFrame {
     Icon kafelek = new ImageIcon("src/resource/kafelek.png");
     Icon flaga = new ImageIcon("src/resource/flaga.png");
     Icon kafelekBomba = new ImageIcon("src/resource/kafelekBomba.png");
     Icon bomba = new ImageIcon("src/resource/bomba.png");
-    Icon jeden = new ImageIcon("src/resource/jeden.png");
-    Icon dwa = new ImageIcon("src/resource/dwa.png");
-    Icon trzy = new ImageIcon("src/resource/trzy.png");
-    Icon cztery = new ImageIcon("src/resource/cztery.png");
-    Icon piec = new ImageIcon("src/resource/piec.png");
-    Icon szesc = new ImageIcon("src/resource/szesc.png");
-    Icon siedem = new ImageIcon("src/resource/siedem.png");
-    Icon osiem = new ImageIcon("src/resource/osiem.png");
-    Icon zero = new ImageIcon("src/resource/pustyKafelek.png");
-    Icon you = new ImageIcon("src/resource/you.png");
-    Icon have = new ImageIcon("src/resource/have.png");
-    Icon won = new ImageIcon("src/resource/won.png");
-    Icon smile = new ImageIcon("src/resource/smile.png");
+    Icon jeden = new ImageIcon("src/resource/numbers/jeden.png");
+    Icon dwa = new ImageIcon("src/resource/numbers/dwa.png");
+    Icon trzy = new ImageIcon("src/resource/numbers/trzy.png");
+    Icon cztery = new ImageIcon("src/resource/numbers/cztery.png");
+    Icon piec = new ImageIcon("src/resource/numbers/piec.png");
+    Icon szesc = new ImageIcon("src/resource/numbers/szesc.png");
+    Icon siedem = new ImageIcon("src/resource/numbers/siedem.png");
+    Icon osiem = new ImageIcon("src/resource/numbers/osiem.png");
+    Icon zero = new ImageIcon("src/resource/numbers/pustyKafelek.png");
+    Icon you = new ImageIcon("src/resource/win/you.png");
+    Icon have = new ImageIcon("src/resource/win/have.png");
+    Icon won = new ImageIcon("src/resource/win/won.png");
+    Icon smile = new ImageIcon("src/resource/win/smile.png");
+    Icon resetBtn = new ImageIcon("src/resource/restart.png");
 
     private JButton[][] buttons = null;
     private final JFrame GameBoard = new JFrame("Powodzenia!");
@@ -32,7 +34,12 @@ public class Game extends JFrame {
     private int COLUMNS;
     private int BOMBS;
     private boolean GameStat = true;
-    private Timer timer = new Timer();
+    private Timer timer;
+    private Color colorDef = Color.decode("#4D4C4C");
+    private JLabel numberBombs = new JLabel();
+    private long startTime = System.currentTimeMillis();
+    private int second;
+    private JLabel timeLabel = new JLabel();
 
     public void diff(int DIFF) {
         switch (DIFF) {
@@ -57,7 +64,7 @@ public class Game extends JFrame {
             case 4:
                 ROWS = 6;
                 COLUMNS = 6;
-                BOMBS = 8;
+                BOMBS = 2;
                 game();
                 break;
         }
@@ -68,32 +75,51 @@ public class Game extends JFrame {
         JPanel TopPanel = new JPanel();
         JPanel LeftPanel = new JPanel();
         JPanel RightPanel = new JPanel();
+        JButton reset = new JButton();
+
+
 
         GameBoard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GameBoard.setSize(ROWS * 40 + 50, COLUMNS * 40 + 60);
         GameBoard.setVisible(true);
         GameBoard.setLayout(new BorderLayout());
         GameBoard.setResizable(false);
+        GameBoard.setBackground(colorDef);
 
-        JButton reset = new JButton("reset");
-        reset.setPreferredSize(new Dimension(60, 60));
-        TopPanel.add(reset);
+        numberBombs.setPreferredSize(new Dimension(40, 40));
+        numberBombs.setVisible(true);
+        numberBombs.setText(String.valueOf(BOMBS));
+        numberBombs.setName(String.valueOf(BOMBS));
+        numberBombs.setForeground(Color.BLACK);
+
+        timeLabel.setVisible(true);
+        timeLabel.setPreferredSize(new Dimension(40,40));
+        timeLabel.setBackground(Color.white);
+
+        reset.setIcon(resetBtn);
+        reset.setPreferredSize(new Dimension(80, 40));
         reset.addActionListener(new myActionListener());
+
         Grid.setPreferredSize(new Dimension(COLUMNS, ROWS));
         Grid.setVisible(true);
-        Grid.setBackground(Color.cyan);
+        Grid.setBackground(colorDef);
 
         TopPanel.setPreferredSize(new Dimension(COLUMNS, 60));
         TopPanel.setVisible(true);
-        TopPanel.setBackground(Color.GREEN);
+        TopPanel.setBackground(colorDef);
+        TopPanel.setLayout(new GridLayout(1,3));
+        TopPanel.add(numberBombs);
+        TopPanel.add(reset);
+        TopPanel.add(timeLabel);
+        TopPanel.setOpaque(true);
 
         RightPanel.setPreferredSize(new Dimension(25, ROWS));
         RightPanel.setVisible(true);
-        RightPanel.setBackground(Color.GRAY);
+        RightPanel.setBackground(colorDef);
 
         LeftPanel.setPreferredSize(new Dimension(25, ROWS));
-        LeftPanel.setBackground(Color.GRAY);
         LeftPanel.setVisible(true);
+        LeftPanel.setBackground(colorDef);
 
         GameBoard.add(TopPanel, BorderLayout.NORTH);
         GameBoard.add(Grid, BorderLayout.CENTER);
@@ -114,9 +140,22 @@ public class Game extends JFrame {
             }
         }
         generateMinefield(ROWS, COLUMNS, BOMBS);
+        time();
+        timer.start();
     }
 
-    public void generateMinefield(int ROWS, int COLUMNS, int BOMBS) {
+    private void time() {
+        second = 0;
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                second++;
+                timeLabel.setText(String.valueOf(second));
+            }
+        });
+    }
+
+    private void generateMinefield(int ROWS, int COLUMNS, int BOMBS) {
             for (int i = 0; i < BOMBS; i++) {
                 double row = Math.floor(Math.random() * ROWS);
                 double column = Math.floor(Math.random() * COLUMNS);
@@ -128,7 +167,7 @@ public class Game extends JFrame {
             }
     }
 
-    public void setIcon(int col, int row) {
+    private void setIcon(int col, int row) {
         int minesNearby = nearbyMines(col, row);
         System.out.println(minesNearby);
         switch (minesNearby) {
@@ -169,6 +208,7 @@ public class Game extends JFrame {
         else if (!buttons[col][row].getIcon().equals(flaga)) {
             if (buttons[col][row].getIcon().equals(kafelekBomba)) BOMBS--;
             buttons[col][row].setIcon(flaga);
+            numberBombs.setText(String.valueOf(BOMBS));
             isWinner();
         } else {
             buttons[col][row].setIcon(kafelek);
@@ -178,12 +218,13 @@ public class Game extends JFrame {
     private void isWinner(){
         System.out.println(BOMBS);
         if (BOMBS == 0) {
-            System.out.println("win");
             buttons[(COLUMNS/2)][(ROWS/2)].setIcon(smile);
             buttons[(COLUMNS/2)-1][(ROWS/2)-1].setIcon(you);
             buttons[(COLUMNS/2)][(ROWS/2)-1].setIcon(won);
             buttons[(COLUMNS/2)-1][(ROWS/2)].setIcon(have);
             GameStat = false;
+            timer.stop();
+            System.out.println(second);
         }
     }
 
