@@ -40,10 +40,21 @@ public class Main {
             }
         });
 
+        JButton buttonTest = new JButton("TEST RUN");
+        frameMain.getContentPane().add(buttonEasy);
+        buttonTest.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frameMain.dispose();
+                game.diff(4);
+            }
+        });
+
         frameMain.setLayout(new GridLayout(1,3));
         frameMain.add(buttonEasy);
         frameMain.add(buttonMedium);
         frameMain.add(buttonHard);
+        frameMain.add(buttonTest);
         frameMain.setVisible(true);
     }
 }
